@@ -1,0 +1,13 @@
+{
+  "name": "pi-monitor",
+  "version": "1.0.0",
+  "description": "Monitor Pi",
+  "main": "roku.js",
+  "author": "Nilesh",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "slack-node": "^0.1.8"
+  }
+}
