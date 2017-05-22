@@ -16,8 +16,10 @@ rp(options)
 			let date = new Date();
 			let hour = date.getHours();
 			let minute = date.getMinutes();
-			if (hour == 9 && minute >= 0 && minute <= 9) { // Send message only once a day
-				let message = `The current temperature at \`${data.name}\` is \`${data.celsius}°C\`.`
+			if (hour == 3 && minute >= 30 && minute <= 39) { // Send message only once a day
+				let message = `The current temperature at \`${data.name}\` is \`${data.celsius}°C\` `
+				message += `, the humidity is \`${data.humidity}%\` `
+				message += `and the air quality index is \`${data.readingAQ}ppm\`.`
 				slack.sendMessage(SLACK_CHANNEL, message);
 			}
 		}
