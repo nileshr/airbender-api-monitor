@@ -1,5 +1,6 @@
 const rp = require('request-promise');
-const slack = require('./slack')
+const slack = require('./slack');
+const moment = require('moment');
 
 const API_URI = "http://52.66.182.145:5000/v1/currentStatus";
 const NO_API_REPONSE = "Uh-oh, Looks like the Raspberry Pi is down.";
@@ -30,10 +31,13 @@ rp(options)
 			let hour = date.getHours();
 			let minute = date.getMinutes();
 			let airQuality = getAirQualityMessage(data.readingAQ);
+			let ts = data.timeStamp.slice(0, 8) + "T" + data.timeStamp.slice(8); // Date and time should be separated with T
+			let measureTime = moment(ts).format("h:mm:ss a");
 			if (ALLOWED_HOURS.includes(hour) && minute >= 30 && minute <= 39) { // Send message only once a day
 				let message = `The current temperature at ${data.name} is ${data.celsius}°C`
 				message += `, the humidity is ${data.humidity}% `
 				message += `and the air ${airQuality} (${data.readingAQ}ppm).`
+				message += `\n Debug Only - Reading taken at ${measureTime}`
 				slack.sendMessage(SLACK_CHANNEL, message);
 			}
 		}
