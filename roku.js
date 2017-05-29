@@ -12,16 +12,28 @@ const options = {
 	json: true
 }
 
+function getAirQualityMessage(index) {
+	if (index >= 0 && index <= 100)
+		return "smells like roses";
+	else if (index >= 101 && index <= 400)
+		return "is a bit dusty";
+	else if (index >= 401 && index <= 700)
+		return "quality index is at harmful levels";
+	else
+		return "quality is at end of the world levels";	
+}
+
 rp(options)
 	.then(function (data) {
 		if (!!data) {
 			let date = new Date();
 			let hour = date.getHours();
 			let minute = date.getMinutes();
+			let airQuality = getAirQualityMessage(data.readingAQ);
 			if (ALLOWED_HOURS.includes(hour) && minute >= 30 && minute <= 39) { // Send message only once a day
-				let message = `The current temperature at \`${data.name}\` is \`${data.celsius}°C\` `
-				message += `, the humidity is \`${data.humidity}%\` `
-				message += `and the air quality index is \`${data.readingAQ}ppm\`.`
+				let message = `The current temperature at ${data.name} is ${data.celsius}°C`
+				message += `, the humidity is ${data.humidity}% `
+				message += `and the air ${airQuality} (${data.readingAQ}ppm).`
 				slack.sendMessage(SLACK_CHANNEL, message);
 			}
 		}
